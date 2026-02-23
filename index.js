@@ -4,7 +4,8 @@ const app = express();
 app.use(express.json());
 
 const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || "change_me";
-const ALLOWED_WA_ID = process.env.ALLOWED_WA_ID || "";
+const DEFAULT_ALLOWED = "13233775620";
+const ALLOWED_WA_ID = process.env.ALLOWED_WA_ID || DEFAULT_ALLOWED;
 
 app.get("/whatsapp-webhook", (req, res) => {
   const mode = req.query["hub.mode"];
@@ -33,7 +34,7 @@ app.post("/whatsapp-webhook", async (req, res) => {
             continue;
           }
 
-          console.log("Allowed message:", message?.text?.body);
+          console.log("Allowed message:", message?.text?.body ?? "[non-text]");
           // TODO: forward to OpenClaw dispatcher here
         }
       }
